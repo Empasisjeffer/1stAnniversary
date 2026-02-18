@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tulips For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d0204 0%, #1a0f0f 25%, #2d1810 50%, #1a0f0f 75%, #0d0204 100%);
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle vignette */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Decorative corners */
+        .corner-decoration {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            z-index: 5;
+        }
+
+        .corner-decoration.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+            border-top-left-radius: 8px;
+        }
+
+        .corner-decoration.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+            border-top-right-radius: 8px;
+        }
+
+        .corner-decoration.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+        }
+
+        .corner-decoration.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+            border-bottom-right-radius: 8px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .ornament-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .ornament-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+        }
+
+        .ornament-center {
+            margin: 0 15px;
+            color: rgba(212, 175, 55, 0.8);
+            font-size: 1.3rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #d4af37;
+            font-size: 3rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+
+        /* Tulips Garden */
+        .tulip-garden {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        /* Individual Tulip */
+        .tulip-container {
+            position: relative;
+            width: 160px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .tulip-container:hover {
+            transform: translateY(-15px);
+        }
+
+        .tulip-container:hover .tulip-bloom {
+            animation: bloomSway 2s ease-in-out infinite;
+        }
+
+        /* Tulip Bloom - Real Image */
+        .tulip-bloom {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            z-index: 3;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 
+                0 5px 20px rgba(0,0,0,0.3),
+                0 0 0 3px rgba(255,255,255,0.1),
+                inset 0 0 20px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+        }
+
+        .tulip-bloom img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: all 0.5s ease;
+        }
+
+        .tulip-container:hover .tulip-bloom {
+            transform: scale(1.05);
+            box-shadow: 
+                0 8px 30px rgba(0,0,0,0.4),
+                0 0 0 4px rgba(212, 175, 55, 0.3),
+                inset 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .tulip-container:hover .tulip-bloom img {
+            transform: scale(1.1);
+        }
+
+        /* Stem - connects to image */
+        .tulip-stem {
+            width: 10px;
+            height: 100px;
+            background: linear-gradient(90deg, #228b22 0%, #32cd32 40%, #228b22 100%);
+            position: relative;
+            z-index: 2;
+            margin-top: -10px;
+            border-radius: 5px;
+            box-shadow: 
+                inset 2px 0 4px rgba(255,255,255,0.2), 
+                inset -2px 0 4px rgba(0,0,0,0.2),
+                0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Leaves */
+        .tulip-leaves {
+            position: absolute;
+            bottom: 30px;
+            width: 120px;
+            height: 80px;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            background: linear-gradient(135deg, #32cd32 0%, #228b22 50%, #1a6b1a 100%);
+            border-radius: 0 80% 0 80%;
+            box-shadow: inset 3px 3px 10px rgba(255,255,255,0.2), inset -3px -3px 10px rgba(0,0,0,0.2);
+        }
+
+        .leaf.left {
+            left: 20px;
+            transform: rotate(-30deg);
+            z-index: 1;
+        }
+
+        .leaf.right {
+            right: 20px;
+            transform: rotate(30deg) scaleX(-1);
+            z-index: 1;
+        }
+
+        /* Flower label */
+        .flower-label {
+            position: absolute;
+            bottom: 0;
+            font-family: 'Playfair Display', serif;
+            color: rgba(212, 175, 55, 0.8);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        .tulip-container:hover .flower-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Message card */
+        .message-card {
+            background: linear-gradient(145deg, #fffcf9 0%, #faf7f2 100%);
+            border-radius: 12px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 
+                0 0 0 1px rgba(139, 115, 85, 0.3),
+                0 0 0 4px rgba(212, 175, 55, 0.3),
+                0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .message-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            border-radius: 12px;
+        }
+
+        .message-card h2 {
+            font-family: 'Playfair Display', serif;
+            color: #4a1528;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .message-card p {
+            color: #6b4e3d;
+            font-size: 1.1rem;
+            line-height: 2;
+            font-style: italic;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 16px 50px;
+            background: transparent;
+            color: #4a1528;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 2px solid #8b7355;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%);
+            color: #4a1528;
+            border-color: #d4af37;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Animations */
+        @keyframes bloomSway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(2deg); }
+            75% { transform: rotate(-2deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.4s; }
+        .fade-in:nth-child(5) { animation-delay: 0.5s; }
+        .fade-in:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .tulip-container { width: 130px; height: 240px; }
+            .tulip-bloom { width: 65px; height: 82px; }
+            .petal { width: 40px; height: 65px; }
+            .message-card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="ornament-top">
+                <div class="ornament-line"></div>
+                <span class="ornament-center">❦</span>
+                <div class="ornament-line"></div>
+            </div>
+            <h1>Tulips For You</h1>
+            <p class="subtitle">Each one represents a reason why I love you</p>
+        </div>
+
+        <div class="tulip-garden">
+            <!-- Red Tulip -->
+            <div class="tulip-container red fade-in">
+                <div class="tulip-bloom">
+                    <img src="y.jpg" alt="Love Tulip">
+                </div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaves">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                </div>
+                <span class="flower-label">Love</span>
+            </div>
+
+            <!-- Pink Tulip -->
+            <div class="tulip-container pink fade-in">
+                <div class="tulip-bloom">
+                    <img src="u.jpg" alt="Beauty Tulip">
+                </div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaves">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                </div>
+                <span class="flower-label">Beauty</span>
+            </div>
+
+            <!-- Yellow Tulip -->
+            <div class="tulip-container yellow fade-in">
+                <div class="tulip-bloom">
+                    <img src="r.jpg" alt="Joy Tulip">
+                </div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaves">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                </div>
+                <span class="flower-label">Joy</span>
+            </div>
+
+            <!-- White Tulip -->
+            <div class="tulip-container white fade-in">
+                <div class="tulip-bloom">
+                    <img src="h1.jpg" alt="Purity Tulip">
+                </div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaves">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                </div>
+                <span class="flower-label">Purity</span>
+            </div>
+
+            <!-- Purple Tulip -->
+            <div class="tulip-container purple fade-in">
+                <div class="tulip-bloom">
+                    <img src="g.jpg" alt="Royalty Tulip">
+                </div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaves">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                </div>
+                <span class="flower-label">Royalty</span>
+            </div>
+
+            <!-- Orange Tulip -->
+            <div class="tulip-container orange fade-in">
+                <div class="tulip-bloom">
+                    <img src="e.jpg" alt="Passion Tulip">
+                </div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaves">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                </div>
+                <span class="flower-label">Passion</span>
+            </div>
+        </div>
+
+        <div class="message-card">
+            <h2>Just Like These Tulips</h2>
+            <p>
+                "Like tulips in the spring, my love for you blooms anew each day.<br>
+                Delicate yet strong, beautiful and timeless.<br>
+                These flowers may fade, but my love for you never will."
+            </p>
+            <a href="page2.html" class="btn">Return to Gifts</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d0204 0%, #1a0f0f 25%, #2d1810 50%, #1a0f0f 75%, #0d0204 100%);
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle vignette */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Decorative corners */
+        .corner-decoration {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            z-index: 5;
+        }
+
+        .corner-decoration.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+            border-top-left-radius: 8px;
+        }
+
+        .corner-decoration.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+            border-top-right-radius: 8px;
+        }
+
+        .corner-decoration.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+        }
+
+        .corner-decoration.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+            border-bottom-right-radius: 8px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: linear-gradient(145deg, #fffcf9 0%, #faf7f2 30%, #f5f0e8 70%, #ede8df 100%);
+            border-radius: 12px;
+            padding: 70px 60px;
+            box-shadow: 
+                0 0 0 1px rgba(139, 115, 85, 0.3),
+                0 0 0 4px rgba(212, 175, 55, 0.3),
+                0 0 0 5px rgba(139, 115, 85, 0.2),
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                inset 0 0 80px rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Inner border */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            right: 25px;
+            bottom: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        /* Corner flourishes */
+        .corner-flourish {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            z-index: 2;
+        }
+
+        .corner-flourish.top-left {
+            top: 15px;
+            left: 15px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-flourish.top-right {
+            top: 15px;
+            right: 15px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-flourish.bottom-left {
+            bottom: 15px;
+            left: 15px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-flourish.bottom-right {
+            bottom: 15px;
+            right: 15px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .ornament-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .ornament-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 115, 85, 0.6), transparent);
+        }
+
+        .ornament-center {
+            margin: 0 15px;
+            color: rgba(139, 115, 85, 0.8);
+            font-size: 1.3rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #4a1528;
+            font-size: 2.5rem;
+            font-weight: 400;
+            text-align: center;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .date {
+            text-align: center;
+            color: #8b7355;
+            font-size: 1rem;
+            font-style: italic;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .letter-content {
+            color: #4a1528;
+            font-size: 1.15rem;
+            line-height: 2;
+            text-align: justify;
+        }
+
+        .letter-content p {
+            margin-bottom: 25px;
+            text-indent: 2em;
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', serif;
+            color: #4a1528;
+        }
+
+        .signature-line {
+            font-size: 1.4rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .signature-name {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8b7355;
+        }
+
+        .ornament-bottom {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.5rem;
+            color: rgba(139, 115, 85, 0.6);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 16px 50px;
+            background: transparent;
+            color: #4a1528;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 2px solid #8b7355;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%);
+            color: #4a1528;
+            border-color: #d4af37;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Fade in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 1s ease forwards;
+            opacity: 0;
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.2s; }
+        .fade-in:nth-child(2) { animation-delay: 0.4s; }
+        .fade-in:nth-child(3) { animation-delay: 0.6s; }
+        .fade-in:nth-child(4) { animation-delay: 0.8s; }
+        .fade-in:nth-child(5) { animation-delay: 1s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+            }
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+            }
+            .letter-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <div class="container">
+        <div class="corner-flourish top-left"></div>
+        <div class="corner-flourish top-right"></div>
+        <div class="corner-flourish bottom-left"></div>
+        <div class="corner-flourish bottom-right"></div>
+
+        <div class="ornament-top">
+            <div class="ornament-line"></div>
+            <span class="ornament-center">❦</span>
+            <div class="ornament-line"></div>
+        </div>
+
+        <h1>My Dearest Love</h1>
+        <div class="date">Happy 1st Anniversary</div>
+
+        <div class="letter-content">
+            <p class="fade-in">Happy anniversary babyy! Thank you for making me special always babyy so happy baby kay na survived dyod nato ang 1 year by even daghan challenge/problema ni abot strong gihapon kaayo ga gikaya nato tana problem by kay i know challenge ra dyod nas atoa life kay para puhon bisag unsa nga problem ato ma agian ma survive nato, so proud kaayo sa ato relationship baby kay grabe sab ka strong and healthy and so happy baby sa 1 year panag-uban daghan kaayo memories na agian nato kaguol, kalipay kay diman dyod always nga happy ta by naa man dyod problem mo abot but nalampos nato baby (ack so kilig na by)</p>
+
+            <p class="fade-in">Stay strong lang ta always baby ha iloveyousomuchhh babyy hihi, thankyou sab kaayo sa mga libre nimo by mao sa lang ni gift nako today baby sa next week na ang gift na legit dyod bawi rakos imoha baby, babyy ayaw pag bag-o ha dapat ing-ani ra dyod ta like always excited babyy labi na sato relationship like healthy lang baby.</p>
+
+            <p class="fade-in">Goodluck sa acads always babyy i know ma survived ni nato atoa acads and mo graduate ta by tas ma successful nya mag work tas ipon dayun tapos business baby tas isa na dayun ta ka house (omg excited me) tas pakasal dayun puhon puhon baby. Sabay nato tuparon ato mga pangandoy by always lang ko support sa imoha always ha.</p>
+
+            <p class="fade-in">I know sad ka baby kay na insecure sab kas imoha self pero by una nako kita sa imoha until now mao ra dyod ka pretty baby mas ni pretty gwapa dyod kaayo ka by ikaw pinaka ka gwapa sa tibuok ka libutan akoa babyy, iloveyouuuusomuchh always. Pakatatag lang ta always by ha i know daghan pa challenge and problem mo abot sato by sa relationship nato and acads pero i know kaya nato ma sulban dayun basta uban lang ta always and naa sab ka by, thankyou sa tanan babyy before by insecure kayko sako self pero kato ni abot ka by grabe na kaayo nako ka confidence like idol dyod akoa idol by proud kaykos imoha🥺, love kaayo teka always babyyy.</p>
+
+            <p class="fade-in">E pray nako atong another year nasab by na hopefully daghan pang blessings and opportunity mo abot sato and hopefully e guide ta ni God sato relationship babyy. So proud of you always my baby...</p>
+        </div>
+
+        <div class="signature fade-in">
+            <div class="signature-line">With all my love,</div>
+            <div class="signature-name">DIANE HOPE TIZON TISMO</div>
+        </div>
+
+        <div class="ornament-bottom fade-in">~ ❦ ~</div>
+
+        <a href="page2.html" class="btn fade-in">Return to Gifts</a>
+    </div>
+</body>
+</html>
